@@ -263,17 +263,41 @@ class Game {
 
     const checkOrientation = () => {
       if (!this.isMobile) return;
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      if (vh > vw) {
-        this.rotateOverlay.classList.add('visible');
+
+      let isPortrait = null;
+
+      // 方法1: screen.orientation.angle (最可靠)
+      if (screen.orientation && typeof screen.orientation.angle === 'number') {
+        const a = screen.orientation.angle;
+        isPortrait = (a === 0 || a === 180);
+      }
+      // 方法2: window.orientation (旧安卓)
+      else if (typeof window.orientation === 'number') {
+        const a = window.orientation;
+        isPortrait = (a === 0 || a === 180);
+      }
+      // 方法3: 比较宽高
+      if (isPortrait === null) {
+        isPortrait = window.innerHeight > window.innerWidth;
+      }
+
+      if (isPortrait) {
+        this.rotateOverlay.classList.remove('landscape-hidden');
+        this.rotateOverlay.classList.add('portrait-visible');
       } else {
-        this.rotateOverlay.classList.remove('visible');
+        this.rotateOverlay.classList.remove('portrait-visible');
+        this.rotateOverlay.classList.add('landscape-hidden');
       }
     };
 
     window.addEventListener('resize', () => { scale(); checkOrientation(); });
-    window.addEventListener('orientationchange', () => { setTimeout(() => { scale(); checkOrientation(); }, 200); });
+    window.addEventListener('orientationchange', () => {
+      // 多次检测，确保浏览器更新完尺寸
+      checkOrientation();
+      setTimeout(checkOrientation, 100);
+      setTimeout(checkOrientation, 300);
+      setTimeout(checkOrientation, 600);
+    });
     scale();
     checkOrientation();
   }

@@ -387,9 +387,21 @@ body.is-mobile #game-wrapper {
   50% { transform: rotate(90deg); }
 }
 
-/* show overlay when portrait on mobile - controlled by JS */
-#rotate-overlay.visible {
-  display: flex;
+/* CSS media query: show overlay on small portrait screens */
+@media (max-width: 960px) and (orientation: portrait) {
+  #rotate-overlay {
+    display: flex;
+  }
+}
+
+/* JS can override: hide when landscape */
+#rotate-overlay.landscape-hidden {
+  display: none !important;
+}
+
+/* JS can override: show when portrait */
+#rotate-overlay.portrait-visible {
+  display: flex !important;
 }
 
 /* landscape mobile: tighter top bar */
