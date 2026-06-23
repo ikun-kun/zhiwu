@@ -41,6 +41,7 @@ body.is-mobile #game-wrapper {
   border-radius: 0;
   box-shadow: none;
   position: absolute;
+  transform-origin: 0 0;
 }
 
 #top-bar {
@@ -352,6 +353,7 @@ body.is-mobile #game-wrapper {
 
 #game-wrapper.scaled {
   position: absolute;
+  transform-origin: 0 0;
 }
 
 /* ============ ROTATE OVERLAY ============ */

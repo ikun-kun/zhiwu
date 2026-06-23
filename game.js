@@ -250,9 +250,15 @@ class Game {
       const scaleY = vh / nativeH;
       const s = Math.min(scaleX, scaleY);
       this.wrapper.style.transform = `scale(${s})`;
-      this.wrapper.classList.add('scaled');
-      this.wrapper.style.left = `${(vw - nativeW * s) / 2}px`;
-      this.wrapper.style.top = `${(vh - nativeH * s) / 2}px`;
+      if (this.isMobile || s < 1) {
+        this.wrapper.classList.add('scaled');
+        this.wrapper.style.left = `${(vw - nativeW * s) / 2}px`;
+        this.wrapper.style.top = `${(vh - nativeH * s) / 2}px`;
+      } else {
+        this.wrapper.classList.remove('scaled');
+        this.wrapper.style.left = '';
+        this.wrapper.style.top = '';
+      }
     };
 
     const checkOrientation = () => {
