@@ -356,52 +356,20 @@ body.is-mobile #game-wrapper {
   transform-origin: 0 0;
 }
 
-/* ============ ROTATE OVERLAY ============ */
+/* ============ MOBILE: FORCE LANDSCAPE VIA CSS ============ */
 
-#rotate-overlay {
-  display: none;
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.92);
-  z-index: 9999;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
-
-.rotate-icon {
-  font-size: 64px;
-  animation: rotatePhone 1.5s ease-in-out infinite;
-}
-
-.rotate-text {
-  color: #fff;
-  font-size: 18px;
-  font-weight: 600;
-  text-align: center;
-}
-
-@keyframes rotatePhone {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(90deg); }
-}
-
-/* CSS media query: show overlay on small portrait screens */
 @media (max-width: 960px) and (orientation: portrait) {
-  #rotate-overlay {
-    display: flex;
+  body {
+    align-items: flex-start;
+    justify-content: flex-start;
   }
-}
-
-/* JS can override: hide when landscape */
-#rotate-overlay.landscape-hidden {
-  display: none !important;
-}
-
-/* JS can override: show when portrait */
-#rotate-overlay.portrait-visible {
-  display: flex !important;
+  body.force-landscape {
+    width: 100vh;
+    height: 100vw;
+    transform: rotate(90deg) translateX(0);
+    transform-origin: top left;
+    overflow: hidden;
+  }
 }
 
 /* landscape mobile: tighter top bar */

@@ -232,7 +232,6 @@ class Game {
 
   setupResponsiveScaling() {
     this.wrapper = document.getElementById('game-wrapper');
-    this.rotateOverlay = document.getElementById('rotate-overlay');
 
     const nativeW = CONFIG.CANVAS_W + 16;
     const nativeH = CONFIG.CANVAS_H + 70 + 16;
@@ -261,45 +260,28 @@ class Game {
       }
     };
 
-    const checkOrientation = () => {
+    const forceLandscape = () => {
       if (!this.isMobile) return;
-
-      let isPortrait = null;
-
-      // 方法1: screen.orientation.angle (最可靠)
-      if (screen.orientation && typeof screen.orientation.angle === 'number') {
-        const a = screen.orientation.angle;
-        isPortrait = (a === 0 || a === 180);
-      }
-      // 方法2: window.orientation (旧安卓)
-      else if (typeof window.orientation === 'number') {
-        const a = window.orientation;
-        isPortrait = (a === 0 || a === 180);
-      }
-      // 方法3: 比较宽高
-      if (isPortrait === null) {
-        isPortrait = window.innerHeight > window.innerWidth;
-      }
-
-      if (isPortrait) {
-        this.rotateOverlay.classList.remove('landscape-hidden');
-        this.rotateOverlay.classList.add('portrait-visible');
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      if (vh > vw) {
+        document.body.classList.add('force-landscape');
       } else {
-        this.rotateOverlay.classList.remove('portrait-visible');
-        this.rotateOverlay.classList.add('landscape-hidden');
+        document.body.classList.remove('force-landscape');
       }
     };
 
-    window.addEventListener('resize', () => { scale(); checkOrientation(); });
+    const recheck = () => { scale(); forceLandscape(); };
+
+    window.addEventListener('resize', recheck);
     window.addEventListener('orientationchange', () => {
-      // 多次检测，确保浏览器更新完尺寸
-      checkOrientation();
-      setTimeout(checkOrientation, 100);
-      setTimeout(checkOrientation, 300);
-      setTimeout(checkOrientation, 600);
+      recheck();
+      setTimeout(recheck, 100);
+      setTimeout(recheck, 300);
+      setTimeout(recheck, 600);
     });
     scale();
-    checkOrientation();
+    forceLandscape();
   }
 
   requestFullscreenAndLandscape() {
