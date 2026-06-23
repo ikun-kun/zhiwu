@@ -374,11 +374,9 @@ body {
   50% { transform: rotate(90deg); }
 }
 
-/* show overlay when portrait on mobile */
-@media (orientation: portrait) and (max-width: 960px) {
-  #rotate-overlay {
-    display: flex;
-  }
+/* show overlay when portrait on mobile - controlled by JS */
+#rotate-overlay.visible {
+  display: flex;
 }
 
 /* landscape mobile: tighter top bar */

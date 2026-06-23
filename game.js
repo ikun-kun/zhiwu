@@ -232,6 +232,7 @@ class Game {
 
   setupResponsiveScaling() {
     this.wrapper = document.getElementById('game-wrapper');
+    this.rotateOverlay = document.getElementById('rotate-overlay');
     const nativeW = CONFIG.CANVAS_W + 16;
     const nativeH = CONFIG.CANVAS_H + 70 + 16;
 
@@ -253,8 +254,22 @@ class Game {
       }
     };
 
-    window.addEventListener('resize', scale);
+    const checkOrientation = () => {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const isPortrait = vh > vw;
+      const isMobile = Math.min(vw, vh) < 960;
+      if (isPortrait && isMobile) {
+        this.rotateOverlay.classList.add('visible');
+      } else {
+        this.rotateOverlay.classList.remove('visible');
+      }
+    };
+
+    window.addEventListener('resize', () => { scale(); checkOrientation(); });
+    window.addEventListener('orientationchange', () => { setTimeout(() => { scale(); checkOrientation(); }, 100); });
     scale();
+    checkOrientation();
   }
 
   requestFullscreenAndLandscape() {
@@ -267,7 +282,8 @@ class Game {
       reqFS.call(el).catch(() => {});
     }
 
-    if (screen.orientation && screen.orientation.lock) {
+    const lock = screen.orientation && screen.orientation.lock;
+    if (lock) {
       screen.orientation.lock('landscape').catch(() => {});
     }
   }
