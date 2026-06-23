@@ -343,6 +343,120 @@ body {
   position: absolute;
 }
 
+/* ============ ROTATE OVERLAY ============ */
+
+#rotate-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.92);
+  z-index: 9999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.rotate-icon {
+  font-size: 64px;
+  animation: rotatePhone 1.5s ease-in-out infinite;
+}
+
+.rotate-text {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+
+@keyframes rotatePhone {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(90deg); }
+}
+
+/* show overlay when portrait on mobile */
+@media (orientation: portrait) and (max-width: 960px) {
+  #rotate-overlay {
+    display: flex;
+  }
+}
+
+/* landscape mobile: tighter top bar */
+@media (orientation: landscape) and (max-height: 500px) {
+  #top-bar {
+    height: 48px;
+    padding: 0 6px;
+    gap: 4px;
+  }
+
+  #top-bar::after {
+    bottom: -10px;
+    height: 10px;
+  }
+
+  #sun-counter {
+    font-size: 15px;
+    padding: 2px 8px 2px 6px;
+    min-width: 60px;
+  }
+
+  .sun-icon-big {
+    font-size: 17px;
+  }
+
+  .plant-card {
+    min-width: 42px;
+    padding: 1px 3px 2px;
+    border-radius: 6px;
+  }
+
+  .card-icon-wrap {
+    width: 28px;
+    height: 22px;
+  }
+
+  .card-emoji {
+    font-size: 17px;
+  }
+
+  .card-cost {
+    font-size: 10px;
+  }
+
+  #wave-display {
+    font-size: 11px;
+    padding: 2px 6px;
+  }
+
+  #mute-btn {
+    font-size: 14px;
+    padding: 2px 5px;
+  }
+
+  .overlay-inner {
+    padding: 20px 28px;
+    max-width: 300px;
+  }
+
+  .overlay-icon {
+    font-size: 36px;
+  }
+
+  #result-title {
+    font-size: 26px;
+  }
+
+  #result-subtitle {
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  #restart-btn {
+    padding: 8px 28px;
+    font-size: 15px;
+  }
+}
+
 /* ============ MOBILE / TABLET TOP BAR ============ */
 
 @media (max-width: 960px) {

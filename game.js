@@ -257,6 +257,21 @@ class Game {
     scale();
   }
 
+  requestFullscreenAndLandscape() {
+    if (this._fullscreenDone) return;
+    this._fullscreenDone = true;
+
+    const el = document.documentElement;
+    const reqFS = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+    if (reqFS) {
+      reqFS.call(el).catch(() => {});
+    }
+
+    if (screen.orientation && screen.orientation.lock) {
+      screen.orientation.lock('landscape').catch(() => {});
+    }
+  }
+
   getCanvasCoords(clientX, clientY) {
     const r = this.canvas.getBoundingClientRect();
     const scaleX = CONFIG.CANVAS_W / r.width;
@@ -268,7 +283,10 @@ class Game {
   }
 
   setupEvents() {
+    const tryFullscreen = () => this.requestFullscreenAndLandscape();
+
     this.canvas.addEventListener('click', (e) => {
+      tryFullscreen();
       this.ensureAudio();
       const { x, y } = this.getCanvasCoords(e.clientX, e.clientY);
       this.handleCanvasClick(x, y);
@@ -281,6 +299,7 @@ class Game {
     });
 
     this.canvas.addEventListener('touchstart', (e) => {
+      tryFullscreen();
       e.preventDefault();
       this.ensureAudio();
       const touch = e.touches[0];
@@ -299,10 +318,11 @@ class Game {
     }, { passive: false });
 
     document.querySelectorAll('.plant-card').forEach((c) => {
-      c.addEventListener('click', () => this.selectPlant(c.dataset.plant));
+      c.addEventListener('click', () => { tryFullscreen(); this.selectPlant(c.dataset.plant); });
       c.addEventListener('mouseenter', () => { this.ensureAudio(); this.soundEngine.play('hover'); });
       c.addEventListener('mousedown', () => { this.ensureAudio(); });
       c.addEventListener('touchstart', (e) => {
+        tryFullscreen();
         e.preventDefault();
         this.ensureAudio();
         this.soundEngine.play('hover');
