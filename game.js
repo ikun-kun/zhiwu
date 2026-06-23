@@ -233,8 +233,8 @@ class Game {
   setupResponsiveScaling() {
     this.wrapper = document.getElementById('game-wrapper');
 
-    const nativeW = CONFIG.CANVAS_W + 16;
-    const nativeH = CONFIG.CANVAS_H + 70 + 16;
+    const nativeW = this.wrapper.offsetWidth || CONFIG.CANVAS_W + 16;
+    const nativeH = this.wrapper.offsetHeight || CONFIG.CANVAS_H + 70 + 16;
     const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || ('ontouchstart' in window && window.innerWidth < 1024);
 
     if (isMobile) {
@@ -247,41 +247,19 @@ class Game {
       const vh = window.innerHeight;
       const scaleX = vw / nativeW;
       const scaleY = vh / nativeH;
-      const s = Math.min(scaleX, scaleY);
+      const s = Math.min(scaleX, scaleY, 1);
       this.wrapper.style.transform = `scale(${s})`;
-      if (this.isMobile || s < 1) {
-        this.wrapper.classList.add('scaled');
-        this.wrapper.style.left = `${(vw - nativeW * s) / 2}px`;
-        this.wrapper.style.top = `${(vh - nativeH * s) / 2}px`;
-      } else {
-        this.wrapper.classList.remove('scaled');
-        this.wrapper.style.left = '';
-        this.wrapper.style.top = '';
-      }
+      this.wrapper.style.transformOrigin = 'center center';
     };
 
-    const forceLandscape = () => {
-      if (!this.isMobile) return;
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      if (vh > vw) {
-        document.body.classList.add('force-landscape');
-      } else {
-        document.body.classList.remove('force-landscape');
-      }
-    };
-
-    const recheck = () => { scale(); forceLandscape(); };
-
-    window.addEventListener('resize', recheck);
+    window.addEventListener('resize', scale);
     window.addEventListener('orientationchange', () => {
-      recheck();
-      setTimeout(recheck, 100);
-      setTimeout(recheck, 300);
-      setTimeout(recheck, 600);
+      scale();
+      setTimeout(scale, 100);
+      setTimeout(scale, 300);
+      setTimeout(scale, 600);
     });
     scale();
-    forceLandscape();
   }
 
   requestFullscreenAndLandscape() {

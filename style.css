@@ -20,11 +20,11 @@ body {
 }
 
 body.is-mobile {
-  background: #4a8c3a;
+  background: #3a7a2a;
+  overflow: hidden;
 }
 
 #game-wrapper {
-  position: relative;
   border-radius: 18px;
   overflow: hidden;
   box-shadow:
@@ -32,16 +32,12 @@ body.is-mobile {
     0 0 0 4px #5a3a1a,
     0 0 0 8px #8a6a3a;
   background: #7a5a3a;
-  width: 900px;
-  transform-origin: center center;
   flex-shrink: 0;
 }
 
 body.is-mobile #game-wrapper {
   border-radius: 0;
   box-shadow: none;
-  position: absolute;
-  transform-origin: 0 0;
 }
 
 #top-bar {
@@ -349,29 +345,6 @@ body.is-mobile #game-wrapper {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ============ RESPONSIVE SCALING ============ */
-
-#game-wrapper.scaled {
-  position: absolute;
-  transform-origin: 0 0;
-}
-
-/* ============ MOBILE: FORCE LANDSCAPE VIA CSS ============ */
-
-@media (max-width: 960px) and (orientation: portrait) {
-  body {
-    align-items: flex-start;
-    justify-content: flex-start;
-  }
-  body.force-landscape {
-    width: 100vh;
-    height: 100vw;
-    transform: rotate(90deg) translateX(0);
-    transform-origin: top left;
-    overflow: hidden;
-  }
-}
-
 /* landscape mobile: tighter top bar */
 @media (orientation: landscape) and (max-height: 500px) {
   #top-bar {
@@ -448,8 +421,7 @@ body.is-mobile #game-wrapper {
   }
 }
 
-/* ============ MOBILE / TABLET TOP BAR ============ */
-
+/* tablet */
 @media (max-width: 960px) {
   #top-bar {
     height: 60px;
@@ -550,6 +522,7 @@ body.is-mobile #game-wrapper {
   }
 }
 
+/* phone */
 @media (max-width: 500px) {
   #top-bar {
     height: 52px;
