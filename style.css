@@ -10,9 +10,13 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  min-height: 100dvh;
   font-family: 'Quicksand', 'Microsoft YaHei', sans-serif;
   overflow: hidden;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 #game-wrapper {
@@ -24,6 +28,8 @@ body {
     0 0 0 4px #5a3a1a,
     0 0 0 8px #8a6a3a;
   background: #7a5a3a;
+  width: 900px;
+  transform-origin: center center;
 }
 
 #top-bar {
@@ -329,4 +335,163 @@ body {
 @keyframes cardAppear {
   from { opacity: 0; transform: translateY(-8px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============ RESPONSIVE SCALING ============ */
+
+#game-wrapper.scaled {
+  position: absolute;
+}
+
+/* ============ MOBILE / TABLET TOP BAR ============ */
+
+@media (max-width: 960px) {
+  #top-bar {
+    height: 60px;
+    padding: 0 8px;
+    gap: 6px;
+  }
+
+  #top-bar::after {
+    bottom: -12px;
+    height: 12px;
+  }
+
+  #sun-counter {
+    font-size: 18px;
+    padding: 4px 12px 4px 8px;
+    min-width: 75px;
+  }
+
+  .sun-icon-big {
+    font-size: 22px;
+  }
+
+  #plant-cards {
+    gap: 4px;
+  }
+
+  .plant-card {
+    min-width: 50px;
+    padding: 2px 4px 3px;
+    border-radius: 8px;
+  }
+
+  .card-icon-wrap {
+    width: 36px;
+    height: 28px;
+  }
+
+  .card-emoji {
+    font-size: 22px;
+  }
+
+  .card-cost {
+    font-size: 11px;
+  }
+
+  .card-sun-icon {
+    font-size: 10px;
+  }
+
+  #wave-display {
+    font-size: 12px;
+    padding: 3px 8px;
+  }
+
+  #mute-btn {
+    font-size: 16px;
+    padding: 3px 6px;
+  }
+
+  .overlay-inner {
+    padding: 24px 30px;
+    max-width: 340px;
+  }
+
+  .overlay-icon {
+    font-size: 40px;
+  }
+
+  #result-title {
+    font-size: 28px;
+  }
+
+  #result-subtitle {
+    font-size: 14px;
+    margin-bottom: 14px;
+  }
+
+  #result-stats {
+    gap: 8px;
+  }
+
+  .stat-item {
+    padding: 8px 12px;
+    min-width: 70px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+  }
+
+  .stat-value {
+    font-size: 18px;
+  }
+
+  #restart-btn {
+    padding: 10px 32px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 500px) {
+  #top-bar {
+    height: 52px;
+    padding: 0 6px;
+    gap: 4px;
+  }
+
+  #sun-counter {
+    font-size: 16px;
+    padding: 3px 8px 3px 6px;
+    min-width: 62px;
+  }
+
+  .sun-icon-big {
+    font-size: 18px;
+  }
+
+  .plant-card {
+    min-width: 44px;
+    padding: 2px 3px 2px;
+    border-radius: 6px;
+  }
+
+  .card-icon-wrap {
+    width: 30px;
+    height: 24px;
+  }
+
+  .card-emoji {
+    font-size: 18px;
+  }
+
+  .card-cost {
+    font-size: 10px;
+  }
+
+  .card-sun-icon {
+    font-size: 9px;
+  }
+
+  #wave-display {
+    font-size: 11px;
+    padding: 2px 6px;
+  }
+
+  #mute-btn {
+    font-size: 14px;
+    padding: 2px 5px;
+  }
 }

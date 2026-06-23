@@ -220,6 +220,7 @@ class Game {
     this.blinkTimer = Math.random() * 3000;
     this.blinkDuration = 0;
     for (let r = 0; r < CONFIG.ROWS; r++) this.mowers.push(new LawnMower(r));
+    this.setupResponsiveScaling();
     this.setupEvents();
     this.startWave(0);
     this.loop(0);
@@ -229,24 +230,90 @@ class Game {
     this.soundEngine.ensureInit();
   }
 
+  setupResponsiveScaling() {
+    this.wrapper = document.getElementById('game-wrapper');
+    const nativeW = CONFIG.CANVAS_W + 16;
+    const nativeH = CONFIG.CANVAS_H + 70 + 16;
+
+    const scale = () => {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const scaleX = vw / nativeW;
+      const scaleY = vh / nativeH;
+      const s = Math.min(scaleX, scaleY, 1);
+      this.wrapper.style.transform = `scale(${s})`;
+      if (s < 1) {
+        this.wrapper.classList.add('scaled');
+        this.wrapper.style.left = `${(vw - nativeW * s) / 2}px`;
+        this.wrapper.style.top = `${(vh - nativeH * s) / 2}px`;
+      } else {
+        this.wrapper.classList.remove('scaled');
+        this.wrapper.style.left = '';
+        this.wrapper.style.top = '';
+      }
+    };
+
+    window.addEventListener('resize', scale);
+    scale();
+  }
+
+  getCanvasCoords(clientX, clientY) {
+    const r = this.canvas.getBoundingClientRect();
+    const scaleX = CONFIG.CANVAS_W / r.width;
+    const scaleY = CONFIG.CANVAS_H / r.height;
+    return {
+      x: (clientX - r.left) * scaleX,
+      y: (clientY - r.top) * scaleY
+    };
+  }
+
   setupEvents() {
     this.canvas.addEventListener('click', (e) => {
       this.ensureAudio();
-      const r = this.canvas.getBoundingClientRect();
-      this.handleCanvasClick(e.clientX - r.left, e.clientY - r.top);
+      const { x, y } = this.getCanvasCoords(e.clientX, e.clientY);
+      this.handleCanvasClick(x, y);
     });
     this.canvas.addEventListener('mousemove', (e) => {
       this.ensureAudio();
-      const r = this.canvas.getBoundingClientRect();
-      this.mouseX = e.clientX - r.left;
-      this.mouseY = e.clientY - r.top;
+      const { x, y } = this.getCanvasCoords(e.clientX, e.clientY);
+      this.mouseX = x;
+      this.mouseY = y;
     });
+
+    this.canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      this.ensureAudio();
+      const touch = e.touches[0];
+      const { x, y } = this.getCanvasCoords(touch.clientX, touch.clientY);
+      this.mouseX = x;
+      this.mouseY = y;
+      this.handleCanvasClick(x, y);
+    }, { passive: false });
+
+    this.canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const { x, y } = this.getCanvasCoords(touch.clientX, touch.clientY);
+      this.mouseX = x;
+      this.mouseY = y;
+    }, { passive: false });
+
     document.querySelectorAll('.plant-card').forEach((c) => {
       c.addEventListener('click', () => this.selectPlant(c.dataset.plant));
       c.addEventListener('mouseenter', () => { this.ensureAudio(); this.soundEngine.play('hover'); });
       c.addEventListener('mousedown', () => { this.ensureAudio(); });
+      c.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        this.ensureAudio();
+        this.soundEngine.play('hover');
+        this.selectPlant(c.dataset.plant);
+      }, { passive: false });
     });
     document.getElementById('restart-btn').addEventListener('click', () => this.restart());
+    document.getElementById('restart-btn').addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      this.restart();
+    }, { passive: false });
     document.getElementById('mute-btn').addEventListener('click', () => {
       this.ensureAudio();
       this.soundEngine.muted = !this.soundEngine.muted;
