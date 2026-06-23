@@ -248,8 +248,11 @@ class Game {
       const scaleX = vw / nativeW;
       const scaleY = vh / nativeH;
       const s = Math.min(scaleX, scaleY, 1);
-      this.wrapper.style.transform = `scale(${s})`;
-      this.wrapper.style.transformOrigin = 'center center';
+      if (this.isMobile) {
+        this.wrapper.style.transform = `translate(-50%, -50%) scale(${s})`;
+      } else {
+        this.wrapper.style.transform = `scale(${s})`;
+      }
     };
 
     window.addEventListener('resize', scale);

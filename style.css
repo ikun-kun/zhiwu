@@ -24,6 +24,14 @@ body.is-mobile {
   overflow: hidden;
 }
 
+body.is-mobile #game-wrapper {
+  border-radius: 0;
+  box-shadow: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+
 #game-wrapper {
   border-radius: 18px;
   overflow: hidden;
