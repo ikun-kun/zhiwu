@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>植物大战僵尸</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-wrapper">
+    <div id="top-bar">
+      <div id="sun-counter">
+        <span class="sun-icon-big">☀</span>
+        <span id="sun-count">150</span>
+      </div>
+      <div id="plant-cards">
+        <div class="plant-card" data-plant="sunflower" data-cost="50">
+          <div class="card-icon-wrap">
+            <div class="card-emoji">🌻</div>
+          </div>
+          <div class="card-cost-row">
+            <span class="card-sun-icon">☀</span>
+            <span class="card-cost">50</span>
+          </div>
+        </div>
+        <div class="plant-card" data-plant="peashooter" data-cost="100">
+          <div class="card-icon-wrap">
+            <div class="card-emoji">🫛</div>
+          </div>
+          <div class="card-cost-row">
+            <span class="card-sun-icon">☀</span>
+            <span class="card-cost">100</span>
+          </div>
+        </div>
+        <div class="plant-card" data-plant="wallnut" data-cost="50">
+          <div class="card-icon-wrap">
+            <div class="card-emoji">🥜</div>
+          </div>
+          <div class="card-cost-row">
+            <span class="card-sun-icon">☀</span>
+            <span class="card-cost">50</span>
+          </div>
+        </div>
+        <div class="plant-card" data-plant="snowpea" data-cost="175">
+          <div class="card-icon-wrap">
+            <div class="card-emoji">❄️</div>
+          </div>
+          <div class="card-cost-row">
+            <span class="card-sun-icon">☀</span>
+            <span class="card-cost">175</span>
+          </div>
+        </div>
+      </div>
+      <div id="wave-display">第 <span id="wave-num">1</span> 波</div>
+      <button id="mute-btn" title="切换声音">🔊</button>
+    </div>
+    <canvas id="game-canvas"></canvas>
+    <div id="game-over-overlay" class="hidden">
+      <div class="overlay-inner">
+        <div class="overlay-icon">🏆</div>
+        <h1 id="result-title">游戏结束</h1>
+        <p id="result-subtitle">僵尸突破了你的防线！</p>
+        <div id="result-stats">
+          <div class="stat-item">
+            <span class="stat-label">存活时间</span>
+            <span id="stat-time" class="stat-value">0s</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">击杀僵尸</span>
+            <span id="stat-kills" class="stat-value">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">种植植物</span>
+            <span id="stat-plants" class="stat-value">0</span>
+          </div>
+        </div>
+        <button id="restart-btn">再来一局</button>
+      </div>
+    </div>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
