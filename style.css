@@ -19,6 +19,10 @@ body {
   touch-action: manipulation;
 }
 
+body.is-mobile {
+  background: #4a8c3a;
+}
+
 #game-wrapper {
   position: relative;
   border-radius: 18px;
@@ -30,6 +34,13 @@ body {
   background: #7a5a3a;
   width: 900px;
   transform-origin: center center;
+  flex-shrink: 0;
+}
+
+body.is-mobile #game-wrapper {
+  border-radius: 0;
+  box-shadow: none;
+  position: absolute;
 }
 
 #top-bar {

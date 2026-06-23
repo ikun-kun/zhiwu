@@ -233,33 +233,33 @@ class Game {
   setupResponsiveScaling() {
     this.wrapper = document.getElementById('game-wrapper');
     this.rotateOverlay = document.getElementById('rotate-overlay');
+
     const nativeW = CONFIG.CANVAS_W + 16;
     const nativeH = CONFIG.CANVAS_H + 70 + 16;
+    const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || ('ontouchstart' in window && window.innerWidth < 1024);
+
+    if (isMobile) {
+      document.body.classList.add('is-mobile');
+      this.isMobile = true;
+    }
 
     const scale = () => {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
       const scaleX = vw / nativeW;
       const scaleY = vh / nativeH;
-      const s = Math.min(scaleX, scaleY, 1);
+      const s = Math.min(scaleX, scaleY);
       this.wrapper.style.transform = `scale(${s})`;
-      if (s < 1) {
-        this.wrapper.classList.add('scaled');
-        this.wrapper.style.left = `${(vw - nativeW * s) / 2}px`;
-        this.wrapper.style.top = `${(vh - nativeH * s) / 2}px`;
-      } else {
-        this.wrapper.classList.remove('scaled');
-        this.wrapper.style.left = '';
-        this.wrapper.style.top = '';
-      }
+      this.wrapper.classList.add('scaled');
+      this.wrapper.style.left = `${(vw - nativeW * s) / 2}px`;
+      this.wrapper.style.top = `${(vh - nativeH * s) / 2}px`;
     };
 
     const checkOrientation = () => {
+      if (!this.isMobile) return;
       const vw = window.innerWidth;
       const vh = window.innerHeight;
-      const isPortrait = vh > vw;
-      const isMobile = Math.min(vw, vh) < 960;
-      if (isPortrait && isMobile) {
+      if (vh > vw) {
         this.rotateOverlay.classList.add('visible');
       } else {
         this.rotateOverlay.classList.remove('visible');
@@ -267,7 +267,7 @@ class Game {
     };
 
     window.addEventListener('resize', () => { scale(); checkOrientation(); });
-    window.addEventListener('orientationchange', () => { setTimeout(() => { scale(); checkOrientation(); }, 100); });
+    window.addEventListener('orientationchange', () => { setTimeout(() => { scale(); checkOrientation(); }, 200); });
     scale();
     checkOrientation();
   }
@@ -279,12 +279,25 @@ class Game {
     const el = document.documentElement;
     const reqFS = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
     if (reqFS) {
-      reqFS.call(el).catch(() => {});
-    }
-
-    const lock = screen.orientation && screen.orientation.lock;
-    if (lock) {
-      screen.orientation.lock('landscape').catch(() => {});
+      reqFS.call(el).then(() => {
+        const lock = screen.orientation && screen.orientation.lock;
+        if (lock) {
+          screen.orientation.lock('landscape').catch(() => {});
+        }
+        setTimeout(() => {
+          this.wrapper && window.dispatchEvent(new Event('resize'));
+        }, 300);
+      }).catch(() => {
+        const lock = screen.orientation && screen.orientation.lock;
+        if (lock) {
+          screen.orientation.lock('landscape').catch(() => {});
+        }
+      });
+    } else {
+      const lock = screen.orientation && screen.orientation.lock;
+      if (lock) {
+        screen.orientation.lock('landscape').catch(() => {});
+      }
     }
   }
 
